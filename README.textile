@@ -9,7 +9,7 @@ Track down and install all the deps :p I need to make a propper Makefile.PL I gu
 h2. Usage
 
 <pre>
-    jira-import --configfile etc/yourconfig.yml
+    jira-import import --configfile etc/yourconfig.yml
 </pre>
 
 h3. Example config
