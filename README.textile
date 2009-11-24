@@ -1,0 +1,79 @@
+h1. JIRA-Import
+
+This is a rather crude and flawed perl-app for importing issues into JIRA. 
+
+h2. Installation
+
+Track down and install all the deps :p I need to make a propper Makefile.PL I guess
+
+h2. Usage
+
+<pre>
+    jira-import --configfile etc/yourconfig.yml
+</pre>
+
+h3. Example config
+
+<pre>
+    filename: etc/uservoice.yml
+<code>
+    ---
+    client:
+        - https://jira.my.com/              # Your JIRA base url
+        - uservoice                         # Your jira username
+        - *********                         # Your jira password
+    filter: UserVoice
+    input:
+        class: UserVoice
+        args:
+            account_key: your_account_key   # This is usually a short textstring, like a username
+            api_key: your_api_key           # This is a long sequence, like a hash
+            forum: 31337                    # This is a number, which can be found in the URL on uservoice
+    project: JIRA                           # Your project key in jira ()
+    remote_id_custom_field: 10083           # Your custom field ID of a field where we can store the remote_id
+    remote_issue_type: 12                   # The type of issue you want to create in JIRA
+    
+</code>
+</pre>
+
+h3. Config sections explained
+
+h4. client:
+
+This is three items in a list, url, username, password. It's passed verbatim to 
+JIRA::Client.
+
+h4. filter
+
+A filter to apply to your input, if any. For now there are only one filter, UserVoice,
+which filters WWW::UserVoice::API-suggestions into JIRA-issues
+
+h4. input
+
+Lets you specify the source you want to read issues from. For now we only support one
+source, and that is (You prolly guessed it :p) UserVoice suggestions :)
+
+The format of the config is supposed to be future-proof, but time will show once I need
+to add more sources.
+
+h4. project
+
+The Project in JIRA you want to import issues into (This should be the short-form, key)
+
+h4. remote_id_custom_field
+
+I create a field of the type Import id in jira to store the uservoice id in. That way
+I can keep running the importer, and it will just create each issue once.
+
+bq. Note that this field MUST be added to the create screen of the project you are
+creating issues in, otherwise the API won't allow setting it. If you use the Import id
+type, it won't show up for your users anyways (since it's read only and hidden).
+
+h4. remote_issue_type
+
+This is the type of issue you want to create in jira.
+
+h2. TODO / Going forward
+
+* I have plans to expand the config to allow multiple projects and inputs, so that
+you only need one config-file for mutliple forums on uservoice for instance

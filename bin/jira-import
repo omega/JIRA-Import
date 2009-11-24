@@ -1,0 +1,4 @@
+#!/usr/bin/perl
+
+use JIRA::Import::Cmd;
+JIRA::Import::Cmd->run;
